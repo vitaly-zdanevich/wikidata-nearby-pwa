@@ -551,82 +551,139 @@ h1 {
 
 @media (max-width: 620px) {
 	.shell {
-		padding-right: 13px;
-		padding-left: 13px;
+		padding-top: max(18px, env(safe-area-inset-top));
+		padding-right: 8px;
+		padding-bottom: max(22px, env(safe-area-inset-bottom));
+		padding-left: 8px;
+	}
+
+	.brand {
+		gap: 11px;
+	}
+
+	.brand-icon {
+		width: 48px;
+		height: 48px;
+		border-radius: 13px;
+	}
+
+	h1 {
+		font-size: 1.7rem;
+	}
+
+	.locate-button {
+		width: 44px;
+		height: 44px;
 	}
 
 	.intro {
-		margin-left: 0;
+		margin: 16px 2px 20px;
+		line-height: 1.45;
+	}
+
+	.status {
+		min-height: 128px;
+		margin: 6px 0;
+		padding: 18px;
+		border-radius: 18px;
+	}
+
+	.results-header {
+		margin-bottom: 9px;
+	}
+
+	.item-list {
+		gap: 8px;
+	}
+
+	.item-card {
+		border-radius: 18px;
 	}
 
 	.item-summary {
-		grid-template-columns: 112px minmax(0, 1fr);
-		gap: 14px;
-		padding: 10px;
+		grid-template-columns: 104px minmax(0, 1fr);
+		gap: 11px;
+		padding: 8px;
 	}
 
 	.item-visual,
 	.item-visual img {
-		min-height: 156px;
+		min-height: 142px;
+	}
+
+	.item-visual {
+		border-radius: 12px;
 	}
 
 	.item-copy {
-		padding-top: 3px;
-		padding-right: 3px;
+		padding: 2px 2px 2px 0;
 	}
 
 	.item-copy h2 {
-		font-size: 1.28rem;
+		margin-bottom: 4px;
+		font-size: 1.22rem;
 	}
 
 	.description {
-		margin-bottom: 10px;
+		margin-bottom: 7px;
 		font-size: 0.8rem;
+		line-height: 1.35;
 	}
 
 	.measure {
-		align-items: flex-start;
-		flex-direction: column;
-		gap: 7px;
-		margin-bottom: 10px;
+		align-items: center;
+		flex-flow: row wrap;
+		gap: 6px 9px;
+		margin-bottom: 8px;
 	}
 
 	.item-links {
-		gap: 7px 11px;
+		gap: 5px 10px;
+		margin-bottom: 9px;
 	}
 
 	.audio-area {
 		grid-column: 1 / -1;
+		margin-bottom: 9px;
 	}
 
 	.properties {
-		padding: 4px 18px 24px;
+		padding: 2px 12px 18px;
+	}
+
+	.properties-heading {
+		padding: 18px 0 9px;
 	}
 
 	.property-group {
 		grid-template-columns: 1fr;
-		gap: 7px;
+		gap: 5px;
+		padding: 10px 0;
 	}
 
 	.property-name small {
 		display: inline;
 		margin-left: 5px;
 	}
+
+	.footer {
+		padding-top: 24px;
+	}
 }
 
 @media (max-width: 390px) {
 	.brand-icon {
-		width: 46px;
-		height: 46px;
+		width: 44px;
+		height: 44px;
 	}
 
 	.item-summary {
-		grid-template-columns: 92px minmax(0, 1fr);
+		grid-template-columns: 84px minmax(0, 1fr);
 	}
 
 	.item-visual,
 	.item-visual img {
-		min-height: 138px;
+		min-height: 126px;
 	}
 
 	.audio-area {
