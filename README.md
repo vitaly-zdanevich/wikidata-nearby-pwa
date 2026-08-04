@@ -1,5 +1,17 @@
 # Nearby on Wikidata
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=coverage)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Reliability](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
+
 A small installable PWA that lists the closest geotagged Wikidata items. It shows localized labels and descriptions, distance, north-up direction, Commons images and audio, and links to Wikidata, Wikipedia, and OpenStreetMap. Tapping a card loads every Wikidata property and keeps entity values, Commons media, URLs, coordinates, units, and formatter-backed identifiers linked to their source.
 
 Live app: <https://vitaly-zdanevich.github.io/wikidata-nearby-pwa/>
