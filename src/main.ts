@@ -308,8 +308,6 @@ function makeCard(item: NearbyItem, index: number): HTMLDetailsElement {
 			summary.classList.add('no-image');
 		});
 		visual.append(image);
-		const positionNumber = make('span', 'position-number', String(index + 1).padStart(2, '0'));
-		visual.append(positionNumber);
 		summary.append(visual);
 	} else {
 		summary.classList.add('no-image');
