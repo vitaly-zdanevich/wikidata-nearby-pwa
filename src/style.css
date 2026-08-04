@@ -388,23 +388,6 @@ h1 {
 	text-transform: none;
 }
 
-.expand-label {
-	margin-top: auto;
-	color: var(--muted);
-	font-size: 0.72rem;
-}
-
-.expand-label::after {
-	display: inline-block;
-	margin-left: 7px;
-	content: '↓';
-	transition: transform 0.2s ease;
-}
-
-.item-card[open] .expand-label::after {
-	transform: rotate(180deg);
-}
-
 .properties {
 	padding: 4px 28px 30px;
 	border-top: 1px solid var(--line);

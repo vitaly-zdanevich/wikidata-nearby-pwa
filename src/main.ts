@@ -362,7 +362,6 @@ function makeCard(item: NearbyItem, index: number): HTMLDetailsElement {
 		audioArea.append(audioLinks);
 		copy.append(audioArea);
 	}
-	copy.append(make('span', 'expand-label', 'View all properties'));
 	summary.append(copy);
 
 	const propertyContainer = make('div', 'properties');
