@@ -104,6 +104,18 @@ export interface PropertyDetails {
 	glossary: Map<string, EntityGloss>;
 }
 
+export interface IncomingLink {
+	id: string;
+	label: string;
+	properties: EntityGloss[];
+}
+
+export interface IncomingLinksPage {
+	links: IncomingLink[];
+	hasMore: boolean;
+	nextOffset: number;
+}
+
 function chunks<T>(values: T[], size: number): T[][] {
 	const result: T[][] = [];
 	for (let index = 0; index < values.length; index += size) {
@@ -129,6 +141,10 @@ function localizedValue(
 
 function entityId(uri: string): string | undefined {
 	return /\/(Q\d+)$/.exec(uri)?.[1];
+}
+
+function propertyId(uri: string): string | undefined {
+	return /\/(P\d+)$/.exec(uri)?.[1];
 }
 
 export function commonsFileUrl(filenameOrUrl: string, width?: number): string {
@@ -233,6 +249,21 @@ WHERE {
 GROUP BY ?item
 ORDER BY ?distance
 LIMIT ${limit}`;
+}
+
+function buildIncomingLinksQuery(id: string, offset: number, limit: number): string {
+	if (!/^Q\d+$/.test(id)) throw new Error(`Invalid Wikidata item ID: ${id}`);
+	return `
+SELECT ?item (GROUP_CONCAT(DISTINCT STR(?property); separator="|") AS ?properties)
+WHERE {
+  ?item ?predicate wd:${id} .
+  ?property wikibase:directClaim ?predicate .
+  FILTER(STRSTARTS(STR(?item), "http://www.wikidata.org/entity/Q"))
+}
+GROUP BY ?item
+ORDER BY ?item
+LIMIT ${limit}
+OFFSET ${offset}`;
 }
 
 async function jsonRequest<T>(url: URL, signal?: AbortSignal): Promise<T> {
@@ -342,6 +373,47 @@ export async function findNearbyItems(
 				: undefined,
 		};
 	});
+}
+
+export async function fetchIncomingLinks(
+	id: string,
+	language: string,
+	signal?: AbortSignal,
+	options: { offset?: number; limit?: number } = {},
+): Promise<IncomingLinksPage> {
+	const offset = Math.max(0, Math.trunc(options.offset ?? 0));
+	const limit = Math.min(100, Math.max(1, Math.trunc(options.limit ?? 50)));
+	const endpoint = new URL(SPARQL_ENDPOINT);
+	endpoint.searchParams.set('query', buildIncomingLinksQuery(id, offset, limit + 1));
+	endpoint.searchParams.set('format', 'json');
+	const result = await jsonRequest<SparqlResponse>(endpoint, signal);
+	const hasMore = result.results.bindings.length > limit;
+	const bindings = result.results.bindings.slice(0, limit);
+	const rows = bindings.flatMap((binding) => {
+		const linkedItemId = binding.item ? entityId(binding.item.value) : undefined;
+		if (!linkedItemId) return [];
+		const propertyIds = (binding.properties?.value ?? '')
+			.split('|')
+			.map(propertyId)
+			.filter((property): property is string => property !== undefined);
+		return [{ id: linkedItemId, propertyIds }];
+	});
+	const ids = rows.flatMap(({ id: linkedItemId, propertyIds }) => [linkedItemId, ...propertyIds]);
+	const metadata = await fetchEntities(ids, 'labels', language, signal);
+	const byId = new Map(metadata.map((entity) => [entity.id, entity]));
+
+	return {
+		links: rows.map(({ id: linkedItemId, propertyIds }): IncomingLink => ({
+			id: linkedItemId,
+			label: localizedValue(byId.get(linkedItemId)?.labels, language) ?? linkedItemId,
+			properties: propertyIds.map((linkedPropertyId) => ({
+				id: linkedPropertyId,
+				label: localizedValue(byId.get(linkedPropertyId)?.labels, language) ?? linkedPropertyId,
+			})),
+		})),
+		hasMore,
+		nextOffset: offset + bindings.length,
+	};
 }
 
 function linkedEntityIds(snak: Snak): string[] {

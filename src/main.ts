@@ -2,10 +2,12 @@ import './style.css';
 import { bearingBetween, cardinalDirection, formatDistance, type Coordinates } from './geo';
 import {
 	commonsFileUrl,
+	fetchIncomingLinks,
 	fetchPropertyDetails,
 	findNearbyItems,
 	formatterUrl,
 	type EntityGloss,
+	type IncomingLink,
 	type PropertyDetails,
 	type Snak,
 	type Statement,
@@ -234,7 +236,73 @@ function renderStatement(
 	return row;
 }
 
-function renderProperties(container: HTMLElement, details: PropertyDetails): void {
+function renderIncomingLink(link: IncomingLink): HTMLLIElement {
+	const row = make('li', 'incoming-item');
+	row.append(externalLink(wikidataEntityUrl(link.id), link.label, 'incoming-item-link'));
+	if (link.properties.length > 0) {
+		const via = make('span', 'incoming-via');
+		via.append(document.createTextNode('via '));
+		link.properties.forEach((property, index) => {
+			if (index > 0) via.append(document.createTextNode(' · '));
+			via.append(externalLink(wikidataEntityUrl(property.id), property.label));
+		});
+		row.append(via);
+	}
+	return row;
+}
+
+function appendIncomingLinks(container: HTMLElement, item: NearbyItem): void {
+	const section = make('section', 'incoming-links');
+	const output = make('div', 'incoming-output');
+	const message = make('p', 'incoming-message');
+	message.hidden = true;
+	message.setAttribute('aria-live', 'polite');
+	const button = make('button', 'incoming-button', 'Links to it');
+	button.type = 'button';
+	let nextOffset = 0;
+	let list: HTMLUListElement | undefined;
+
+	const load = async (): Promise<void> => {
+		const loadingMore = nextOffset > 0;
+		button.disabled = true;
+		button.textContent = loadingMore ? 'Loading more…' : 'Loading links…';
+		message.hidden = false;
+		message.textContent = loadingMore ? 'Finding more linked items…' : 'Finding items that link here…';
+		try {
+			const page = await fetchIncomingLinks(item.id, language, undefined, { offset: nextOffset });
+			message.hidden = true;
+			if (!list) {
+				output.replaceChildren(make('h4', 'incoming-heading', 'Links to it'));
+				if (page.links.length === 0) {
+					output.append(make('p', 'incoming-empty', 'No Wikidata items link to this item.'));
+					button.remove();
+					return;
+				}
+				list = make('ul', 'incoming-list');
+				output.append(list);
+			}
+			for (const link of page.links) list.append(renderIncomingLink(link));
+			nextOffset = page.nextOffset;
+			if (page.hasMore) {
+				button.disabled = false;
+				button.textContent = 'Load more links';
+			} else {
+				button.remove();
+			}
+		} catch (error) {
+			message.hidden = false;
+			message.textContent = error instanceof Error ? error.message : 'Could not load linked items.';
+			button.disabled = false;
+			button.textContent = loadingMore ? 'Try loading more again' : 'Try links to it again';
+		}
+	};
+
+	button.addEventListener('click', () => void load());
+	section.append(output, message, button);
+	container.append(section);
+}
+
+function renderProperties(container: HTMLElement, details: PropertyDetails, item: NearbyItem): void {
 	container.replaceChildren();
 	const heading = make('div', 'properties-heading');
 	heading.append(
@@ -252,6 +320,7 @@ function renderProperties(container: HTMLElement, details: PropertyDetails): voi
 	);
 	if (properties.length === 0) {
 		container.append(make('p', 'no-properties', 'This item has no statements.'));
+		appendIncomingLinks(container, item);
 		return;
 	}
 	for (const [propertyId, statements] of properties) {
@@ -267,6 +336,7 @@ function renderProperties(container: HTMLElement, details: PropertyDetails): voi
 		group.append(property, list);
 		container.append(group);
 	}
+	appendIncomingLinks(container, item);
 }
 
 async function loadProperties(item: NearbyItem, container: HTMLElement): Promise<void> {
@@ -278,7 +348,7 @@ async function loadProperties(item: NearbyItem, container: HTMLElement): Promise
 	try {
 		const details = await fetchPropertyDetails(item.id, language);
 		container.dataset.state = 'ready';
-		renderProperties(container, details);
+		renderProperties(container, details, item);
 	} catch (error) {
 		container.dataset.state = 'error';
 		const message = error instanceof Error ? error.message : 'Unknown error';
