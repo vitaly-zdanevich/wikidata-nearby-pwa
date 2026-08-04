@@ -12,7 +12,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=vitaly-zdanevich_wikidata-nearby-pwa&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=vitaly-zdanevich_wikidata-nearby-pwa)
 
-A small installable PWA that lists the closest geotagged Wikidata items. It shows localized labels and descriptions, distance, north-up direction, Commons images and audio, and links to Wikidata, Wikipedia, and OpenStreetMap. Tapping a card loads every Wikidata property and keeps entity values, Commons media, URLs, coordinates, units, and formatter-backed identifiers linked to their source.
+A small installable PWA that lists the closest geotagged Wikidata items. It shows localized labels and descriptions, distance, north-up direction, Commons images and audio, and links to Wikidata, Wikipedia, and Google Maps. Tapping a card loads every Wikidata property and keeps entity values, Commons media, URLs, coordinates, units, and formatter-backed identifiers linked to their source.
 
 Live app: <https://vitaly-zdanevich.github.io/wikidata-nearby-pwa/>
 
@@ -39,4 +39,4 @@ The production command type-checks TypeScript, targets Safari/iOS 15, minifies J
 
 ## Data and privacy
 
-The app requests the device location only to query the Wikidata Query Service for nearby coordinates. It does not store the location or send it to an application-owned server. Wikidata, Wikimedia Commons, Wikipedia, and OpenStreetMap links and media are provided by their respective services.
+The app requests the device location only to query the Wikidata Query Service for nearby coordinates. It does not store the location or send it to an application-owned server. Wikidata, Wikimedia Commons, Wikipedia, and Google Maps links and media are provided by their respective services.

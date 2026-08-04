@@ -296,18 +296,24 @@ function makeCard(item: NearbyItem, index: number): HTMLDetailsElement {
 	if (!currentPosition) throw new Error('A position is required to render a direction');
 	const card = make('details', 'item-card');
 	const summary = make('summary', 'item-summary');
-	const visual = make('div', 'item-visual');
 	if (item.image) {
+		const visual = make('div', 'item-visual');
 		const image = make('img');
 		image.src = item.image;
 		image.alt = '';
 		image.loading = index < 3 ? 'eager' : 'lazy';
 		image.decoding = 'async';
-		image.addEventListener('error', () => visual.classList.add('image-failed'));
+		image.addEventListener('error', () => {
+			visual.remove();
+			summary.classList.add('no-image');
+		});
 		visual.append(image);
+		const positionNumber = make('span', 'position-number', String(index + 1).padStart(2, '0'));
+		visual.append(positionNumber);
+		summary.append(visual);
+	} else {
+		summary.classList.add('no-image');
 	}
-	const positionNumber = make('span', 'position-number', String(index + 1).padStart(2, '0'));
-	visual.append(positionNumber);
 
 	const copy = make('div', 'item-copy');
 	const title = make('h2', undefined, item.label);
@@ -326,11 +332,10 @@ function makeCard(item: NearbyItem, index: number): HTMLDetailsElement {
 	if (item.wikipedia) {
 		links.append(externalLink(item.wikipedia.url, `Wikipedia · ${item.wikipedia.language.toUpperCase()}`));
 	}
-	const mapUrl = new URL('https://www.openstreetmap.org/');
-	mapUrl.searchParams.set('mlat', String(item.location.latitude));
-	mapUrl.searchParams.set('mlon', String(item.location.longitude));
-	mapUrl.hash = `map=18/${item.location.latitude}/${item.location.longitude}`;
-	links.append(externalLink(mapUrl.toString(), 'Map'));
+	const mapUrl = new URL('https://www.google.com/maps/search/');
+	mapUrl.searchParams.set('api', '1');
+	mapUrl.searchParams.set('query', `${item.location.latitude},${item.location.longitude}`);
+	links.append(externalLink(mapUrl.toString(), 'Google Maps'));
 
 	copy.append(title, description, measure, links);
 	if (item.audio.length > 0) {
@@ -358,7 +363,7 @@ function makeCard(item: NearbyItem, index: number): HTMLDetailsElement {
 		copy.append(audioArea);
 	}
 	copy.append(make('span', 'expand-label', 'View all properties'));
-	summary.append(visual, copy);
+	summary.append(copy);
 
 	const propertyContainer = make('div', 'properties');
 	propertyContainer.dataset.state = 'idle';

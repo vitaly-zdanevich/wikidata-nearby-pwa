@@ -256,6 +256,11 @@ h1 {
 	display: none;
 }
 
+.item-summary.no-image {
+	grid-template-columns: minmax(0, 1fr);
+	padding: 18px 22px;
+}
+
 .item-visual {
 	position: relative;
 	min-height: 190px;
@@ -277,10 +282,6 @@ h1 {
 
 .item-card:hover .item-visual img {
 	transform: scale(1.025);
-}
-
-.item-visual.image-failed img {
-	display: none;
 }
 
 .position-number {
@@ -604,6 +605,11 @@ h1 {
 		grid-template-columns: 104px minmax(0, 1fr);
 		gap: 11px;
 		padding: 8px;
+	}
+
+	.item-summary.no-image {
+		grid-template-columns: minmax(0, 1fr);
+		padding: 11px 12px;
 	}
 
 	.item-visual,
