@@ -316,14 +316,10 @@ h1 {
 }
 
 .description {
-	display: -webkit-box;
-	overflow: hidden;
 	margin-bottom: 14px;
 	color: var(--muted);
 	font-size: 0.88rem;
 	line-height: 1.42;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
 }
 
 .measure {
