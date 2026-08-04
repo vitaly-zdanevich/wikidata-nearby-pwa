@@ -14,6 +14,8 @@
 
 A small installable PWA that lists the closest geotagged Wikidata items. It shows localized labels and descriptions, distance, north-up direction, Commons images and audio, and links to Wikidata, Wikipedia, and Google Maps. Tapping a card loads every Wikidata property and keeps entity values, Commons media, URLs, coordinates, units, and formatter-backed identifiers linked to their source.
 
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/1ca0d425-ac9f-4c88-9c05-5b7d70c8db51" />
+
 Live app: <https://vitaly-zdanevich.github.io/wikidata-nearby-pwa/>
 
 ## Run locally
